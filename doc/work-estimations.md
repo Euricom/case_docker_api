@@ -3,7 +3,7 @@
 | Work items                                                                | Estimated (hours)   | Result (hours) |
 |-------------------------------------------------------------------------  |---------|-----------|
 | Write node test app                                                       | 4       | 2         |
-| Test api deploy as node app to Zeit (without docker)                      | 1       |           |
+| Test api deploy as node app to Zeit (without docker)                      | 1       | 1         |
 | Test api In docker (local)                                                | 5       |           |
 | Test api Docker in Zeit                                                   | 3       |           |
 | Test api Docker in heroku                                                 | 5       |           |
