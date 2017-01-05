@@ -5,7 +5,7 @@ machine:
 dependencies:
     override:
         - docker info
-        - docker build --rm=false -t example .
+        - docker build . -t registry.heroku.com/secret-anchorage-45266/web --rm=false
 
 test:
     post:
