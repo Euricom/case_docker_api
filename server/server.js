@@ -1,3 +1,4 @@
+const config = require('./config');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -36,6 +37,6 @@ app.use((err, req, res) => {
 
 module.exports = app;
 
-app.listen(3000, '0.0.0.0', () => {
-    console.log('Example app listening on port 3000!');
+app.listen(config.port, () => {
+    console.log(`Example app listening on port: ${config.port}`);
 });
