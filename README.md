@@ -11,7 +11,7 @@ Then navigate to `http://localhost:3000/`
 ## How to deploy example App to Zeit (without docker)
 
 **Note: Delete or rename the Dockerfile before continuing 
-(if you do not it will upload the app a docker container )**
+(if you do not it will upload the app as a docker container )**
 
 * Download Zeit command line tool from  [https://zeit.co/download#command-line](Zeit)
 * Or you can also install it with npm as follows: `npm install -g now`
@@ -104,6 +104,10 @@ Choose 2 , then you will get some output like
 > Example app listening on port 3000!
 > Deployment complete!                                                               
 ```
+
+## How to deploy example App to Heroku (with Docker)
+
+
 
 ### Helpful resources / References
 

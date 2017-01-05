@@ -1,0 +1,14 @@
+{
+   //"extends": "standard",
+   "extends": "airbnb-base",
+   "globals": {},
+   "env": {
+       "node": true
+   },
+   "rules": {
+       // disable rules from base configurations
+       "no-console": "off",
+      // "linebreak-style": "off",
+       "indent": [2, 4]
+   }
+}
