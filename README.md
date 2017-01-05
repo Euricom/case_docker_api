@@ -9,7 +9,7 @@ npm install
 ## How to test example App locally
 
 ```NodeJS
-run npm start
+npm run start
 ```
 
 Then navigate to `http://localhost:3000/`
