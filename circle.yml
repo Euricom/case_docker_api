@@ -11,6 +11,6 @@ test:
     post:
         - docker run -d -p $PORT:$PORT registry.heroku.com/secret-anchorage-45266/web; sleep 10
         - curl --retry 10 --retry-delay 5 -v http://localhost:$PORT
-        - docker save -o $CIRCLE_ARTIFACTS\example.tar registry.heroku.com/secret-anchorage-45266/web
+        - docker save -o $CIRCLE_ARTIFACTS/example.tar registry.heroku.com/secret-anchorage-45266/web
         - docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
         - docker push registry.heroku.com/secret-anchorage-45266/web
