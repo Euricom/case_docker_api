@@ -1,0 +1,16 @@
+machine:
+    services:
+        - docker
+
+dependencies:
+    override:
+        - docker info
+        - docker build --rm=false -t exampleAppDockerCI .
+
+test:
+    post:
+        - docker run -d -p 9200:9200 exampleAppDockerCI; sleep 10
+        - curl --retry 10 --retry-delay 5 -v http://localhost:9200
+        - docker save -o ${CIRCLE_ARTIFACTS}.tar exampleAppDockerCI
+
+
