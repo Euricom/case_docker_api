@@ -2,7 +2,6 @@ FROM node:alpine
 
 # Create app directory in container & output folder (for docker image / artifacts in CircleCI)
 RUN mkdir -p /usr/src/app
-RUN mkdir -p /usr/src/dockerimages
 WORKDIR /usr/src/app
 
 # Copy node app source code to dir in container
