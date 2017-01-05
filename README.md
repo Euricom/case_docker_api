@@ -1,6 +1,6 @@
 # Deploying a NodeJS App (in combination with Zeit, Docker, CircleCI and Heroku)
 
-## Install example app locallyoooo
+## Install example app locally
 
 ```NodeJS
 npm install
