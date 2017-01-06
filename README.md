@@ -175,6 +175,35 @@ You will see something like this
 > latest: digest: sha256:676ec9dfd05e3d018d4da4a1a301145bb13184c40f7845506d7f0b73a2c8582c size: 1572
 ```
 
+## How to deploy example App to Heroku (using CircleCI and Docker)
+
+1. Create CircleCI account & Heroku account
+2. Clone this repo example into your own repository
+3. Add the example project to CircleCI
+4. Create a new Heroku app (if you do not have one already) (in my case I got "secret-anchorage-45266" as app name)
+5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
+6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
+    1. HEROKU_API_KEY: (see step above)
+    2. PORT: .. (the port on which the NodeJS server will listen. For example 3000)
+7. Edit the circle.yml file in the root of the example so that "secret-anchorage-45266" is replaced by your app name.
+
+**Optional: Edit circle.yml to add some kind of test to see whether the app starts correctly in the container**
+```
+test:
+    post:
+        - docker build -t registry.heroku.com/secret-anchorage-45266/web .
+        - docker run -d -p $PORT:$PORT registry.heroku.com/secret-anchorage-45266/web; sleep 10
+        - curl --retry 10 --retry-delay 5 -v http://localhost:$PORT
+```
+
+**Optional:
+The docker image is saved as an artifact (but of course this is not necessary) so you can download the docker image after a deployment (you could use this..)
+If you do not want this, remove this line**
+
+```
+docker save -o $CIRCLE_ARTIFACTS/example.tar registry.heroku.com/secret-anchorage-45266/web
+```
+
 ### Helpful resources / References
 
 #### Zeit
@@ -190,7 +219,13 @@ You will see something like this
 
 [Node with Docker](https://webapplog.com/node-docker)
 
+[Docker Ignore file](https://docs.docker.com/engine/reference/builder/#dockerignore-file)
+
 #### Heroku with Docker
 
 [Heroku and docker](https://devcenter.heroku.com/articles/container-registry-and-runtime)
+
+#### CircleCI with Docker
+
+[CircleCI and docker](https://circleci.com/docs/docker/)
  

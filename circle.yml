@@ -2,9 +2,9 @@ machine:
     services:
         - docker
 
-dependencies:
-    override:
-        - docker info
+# dependencies:
+#     override:
+#         - docker info
 
 deployment:
     development:

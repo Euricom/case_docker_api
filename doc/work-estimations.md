@@ -7,8 +7,8 @@
 | Test api In docker (local)                                                | 5       | 3         |
 | Test api Docker in Zeit                                                   | 3       | 1         |
 | Test api Docker in heroku                                                 | 5       | 5         |
-| Test api circle CI build circleci & docker                                | 8       |           |
-| Test api circle CI docker + heroku (dev)                                  | 5       |           |
+| Test api circle CI build circleci & docker                                | 8       | 5         |
+| Test api circle CI docker + heroku (dev)                                  | 5       | 4         |
 | Test api circle CI docker + heroku (pipeline) + git flow (staging, prod)  | 2       |           |
 | Website circle CI docker + heroku (dev)                                   | 8       |           |
 | Website circle CI docker + heroku (staging + prod)                        | 3       |           |
