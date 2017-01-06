@@ -1,11 +1,12 @@
 {
   "name": "myapp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./server/server",
     "lint": "eslint .",
-    "test": "ls"
+    "test": "ls",
+    "deployproduction": "echo 'TODO add deployment script'"
   },
   "dependencies": {
     "body-parser": "~1.15.2",

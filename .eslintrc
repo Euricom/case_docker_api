@@ -8,7 +8,7 @@
    "rules": {
        // disable rules from base configurations
        "no-console": "off",
-      // "linebreak-style": "off",
+       "linebreak-style": "off",
        "indent": [2, 4]
    }
 }

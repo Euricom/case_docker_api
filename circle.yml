@@ -7,10 +7,13 @@ machine:
 #         - docker info
 
 deployment:
+
     development:
         branch: develop
         commands:
-        - docker build -t registry.heroku.com/secret-anchorage-45266/web .
-        - docker save -o $CIRCLE_ARTIFACTS/example.tar registry.heroku.com/secret-anchorage-45266/web
-        - docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-        - docker push registry.heroku.com/secret-anchorage-45266/web
+            - deploy/deploy_dev.sh
+    
+    production:
+        branch: master
+        commands:
+            - deploy/deploy_staging.sh
