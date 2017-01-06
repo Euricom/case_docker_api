@@ -2,16 +2,16 @@
 # Ensure exit codes other than 0 fail the build
 set -e
 
-# TEST
+# CircleCI artifacts folder (sort of output folder)
 echo $CIRCLE_ARTIFACTS
 
 # Get version from package.json
 VERSION=$(node server/extractversion.js)
-echo $VERSION;
+echo $VERSION
 
 # Create TAG name (attach version)
-APP = "registry.heroku.com/example123-staging/"
-TAG = $VERSION
+APP="registry.heroku.com/example123-staging/"
+TAG=$VERSION
 echo $APP
 
 # Build docker image
