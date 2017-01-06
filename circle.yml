@@ -11,9 +11,9 @@ deployment:
     development:
         branch: develop
         commands:
-            - deploy/deploy_dev.sh
+            - sh deploy/deploy_dev.sh
     
     production:
         branch: master
         commands:
-            - deploy/deploy_staging.sh
+            - sh deploy/deploy_staging.sh
