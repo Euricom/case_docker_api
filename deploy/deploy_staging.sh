@@ -10,19 +10,15 @@ VERSION=$(node server/extractversion.js)
 echo $VERSION;
 
 # Create TAG name (attach version)
-TAG = "registry.heroku.com/example123-staging/"
-TAG += $VERSION
-TAG += "/web"
-echo $TAG
+APP = "registry.heroku.com/example123-staging/"
+TAG = $VERSION
+echo $APP
 
 # Build docker image
-docker build -t $TAG .
+docker build -t $APP:$TAG .
 # Save docker image to artifacts folder in Circle CI
-docker save -o $CIRCLE_ARTIFACTS/example.tar $TAG
+docker save -o $CIRCLE_ARTIFACTS/example.tar $APP:$TAG
 # Login to Heroku repository
 docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
 # Push the docker image (deploy to Heroku)
-docker push $TAG
-
-# TODO Login to Docker Hub
-# TODO Save docker image (with version tag) in Docker hub (docker push) for use later (if we want to go to production)
+docker push $APP:$TAG
