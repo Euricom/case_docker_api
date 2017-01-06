@@ -21,4 +21,4 @@ docker save -o $CIRCLE_ARTIFACTS/example.tar $APP:$TAG
 # Login to Heroku repository
 docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
 # Push the docker image (deploy to Heroku)
-docker push $APP:$TAG
+docker push registry.heroku.com/example123-dev:1.0.0/web
