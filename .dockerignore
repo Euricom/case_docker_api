@@ -1,0 +1,9 @@
+.dockerignore
+.eslintrc
+.git
+.gitignore
+circle.yml
+doc/
+Dockerfile
+README.md
+
