@@ -10,9 +10,9 @@ VERSION=$(node server/extractversion.js)
 echo $VERSION
 
 # Create TAG name (attach version)
-APP="registry.heroku.com/example123-staging/"
+APP="registry.heroku.com/example123-staging"
 TAG=$VERSION
-echo $APP
+echo $APP:$TAG
 
 # Build docker image
 docker build -t $APP:$TAG .
