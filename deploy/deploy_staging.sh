@@ -16,7 +16,7 @@ NAME=example123
 docker build -t example123 .
 
 # TODO Save docker image to artifacts folder in Circle CI
-# docker save -o $CIRCLE_ARTIFACTS/example.tar $APP:$TAG
+docker save -o $CIRCLE_ARTIFACTS/example.tar $APP:$TAG
 
 # Tag docker image
 docker tag $NAME $REMOTE/$NAME:$VERSION
