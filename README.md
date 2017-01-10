@@ -204,6 +204,32 @@ If you do not want this, remove this line**
 docker save -o $CIRCLE_ARTIFACTS/example.tar example123
 ```
 
+## How to test this example app in Docker using different environment settings
+
+You can use docker compose to accomplish this.
+In the project there  are 2 docker compose files. One for dev and the other one for a production environment.
+
+First create a docker image.
+
+```
+docker-compose build
+
+```
+
+Then start the app 
+
+For development
+```
+docker-compose -f docker-compose.yml up
+```
+or production
+```
+docker-compose -f docker-compose.production.yml up
+```
+
+As an example you will see there is a different environment setting for a database connection string in this project.
+This can be useful if you want to test the docker image on your local docker machine using a development database or rather connect to production database (or maybe another database..)
+
 ### Helpful resources / References
 
 #### Zeit
