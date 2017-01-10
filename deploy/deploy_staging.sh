@@ -37,7 +37,7 @@ echo "Successfully pushed docker images to Docker Hub"
 docker logout
 
 # Login to Heroku repository
-docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
 echo "Successful login to Heroku"
 
 # Deploy to Heroku
