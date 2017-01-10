@@ -9,6 +9,7 @@
        // disable rules from base configurations
        "no-console": "off",
        "linebreak-style": "off",
-       "indent": [2, 4]
+       "indent": [2, 4],
+       "no-param-reassign": "warn"
    }
 }

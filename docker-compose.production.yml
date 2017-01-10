@@ -1,0 +1,6 @@
+web:
+  build: .
+  env_file:
+    - ./deploy/environment_variables/production.env
+  ports:
+    - "3000:3000"

@@ -4,8 +4,9 @@ const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
-const index = require('./routes/index');
-const users = require('./routes/users');
+const indexRoute = require('./routes/index');
+const usersRoute = require('./routes/users');
+const environmentRoute = require('./routes/environment');
 
 const app = express();
 
@@ -14,8 +15,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../app')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/', indexRoute);
+app.use('/users', usersRoute);
+app.use('/environment', environmentRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -27,9 +29,8 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res) => {
     // set locals, only providing error in development
-    //  res.locals.message = err.message;
-    //  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
     // render the error page
     res.status(err.status || 500);
     res.render('error');

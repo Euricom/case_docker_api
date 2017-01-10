@@ -29,7 +29,7 @@ You should see something like this
 ```
 > Deploying ~\Documents\git\case_docker_api\server
 > Using Node.js 7.0.0 (default)
-> Ready! https://myapp-kkoizhpoud.now.sh (copied to clipboard) [2s]
+> Ready! https://example123-kkoizhpoud.now.sh (copied to clipboard) [2s]
 > Upload [====================] 100% 0.0s
 > Sync complete (1.77kB) [1s]
 > Initializing…
@@ -50,8 +50,8 @@ The app is now deployed to Zeit. Now paste the url in the browser.
 ## How to deploy example App to a Local Docker Machine
 
 ```Docker
-docker build -t myapp-latest .
-docker run myapp-latest
+docker build -t example123 .
+docker run example123 -p 3000:3000
 ```
 
 You should see something like this:
@@ -60,9 +60,9 @@ You should see something like this:
 > npm info it worked if it ends with ok
 > npm info using npm@3.10.10
 > npm info using node@v7.3.0
-> npm info lifecycle myapp@0.1.0~prestart: myapp@0.1.0
-> npm info lifecycle myapp@0.1.0~start: myapp@0.1.0
-> myapp@0.1.0 start /usr/src/app
+> npm info lifecycle example123@0.1.0~prestart: example123@0.1.0
+> npm info lifecycle example123@0.1.0~start: example123@0.1.0
+> example123@0.1.0 start /usr/src/app
 > node ./server/server
 > Example app listening on port 3000!
 ```
@@ -103,9 +103,9 @@ Choose 2 , then you will get some output like
 > npm info it worked if it ends with ok
 > npm info using npm@3.10.10
 > npm info using node@v7.3.0
-> npm info lifecycle myapp@0.1.0~start: myapp@0.1.0
-> npm info lifecycle myapp@0.1.0~prestart: myapp@0.1.0
-> > myapp@0.1.0 start /usr/src/app
+> npm info lifecycle example123@0.1.0~start: example123@0.1.0
+> npm info lifecycle example123@0.1.0~prestart: example123@0.1.0
+> > example123@0.1.0 start /usr/src/app
 > > node ./server/server
 > Example app listening on port 3000!
 > Deployment complete!                                                               
@@ -147,11 +147,11 @@ You will see something like this
 > npm info it worked if it ends with ok
 > npm info using npm@3.10.10
 > npm info using node@v7.3.0
-> npm info lifecycle myapp@0.1.0~preinstall: myapp@0.1.0
-> npm info linkStuff myapp@0.1.0
-> npm info lifecycle myapp@0.1.0~install: myapp@0.1.0
-> npm info lifecycle myapp@0.1.0~postinstall: myapp@0.1.0
-> npm info lifecycle myapp@0.1.0~prepublish: myapp@0.1.0
+> npm info lifecycle example123@0.1.0~preinstall: example123@0.1.0
+> npm info linkStuff example123@0.1.0
+> npm info lifecycle example123@0.1.0~install: example123@0.1.0
+> npm info lifecycle example123@0.1.0~postinstall: example123@0.1.0
+> npm info lifecycle example123@0.1.0~prepublish: example123@0.1.0
 > npm info ok
 >  ---> e2f3affa48f7
 > Removing intermediate container 7d9119f19f3c
@@ -165,7 +165,7 @@ You will see something like this
 > Removing intermediate container 3742e9cd9271
 > Successfully built 6aa1efeb0a45
 > SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
-> The push refers to a repository [registry.heroku.com/secret-anchorage-45266/web]
+> The push refers to a repository [registry.heroku.com/example123-dev/web]
 > af423bb0e78f: Pushed
 > 5d40bb2d896f: Pushed
 > 1c809f2c94c1: Pushed
@@ -180,19 +180,19 @@ You will see something like this
 1. Create CircleCI account & Heroku account
 2. Clone this repo example into your own repository
 3. Add the example project to CircleCI
-4. Create a new Heroku app (if you do not have one already) (in my case I got "secret-anchorage-45266" as app name)
+4. Create a new Heroku app (if you do not have one already)
 5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
 6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
     1. HEROKU_API_KEY: (see step above)
     2. PORT: .. (the port on which the NodeJS server will listen. For example 3000)
-7. Edit the circle.yml file in the root of the example so that "secret-anchorage-45266" is replaced by your app name.
+7. Edit the circle.yml file in the root of the example so that "yourappname" is replaced by your app name.
 
 **Optional: Edit circle.yml to add some kind of test to see whether the app starts correctly in the container**
 ```
 test:
     post:
-        - docker build -t registry.heroku.com/secret-anchorage-45266/web .
-        - docker run -d -p $PORT:$PORT registry.heroku.com/secret-anchorage-45266/web; sleep 10
+        - docker build -t example123 .
+        - docker run -d -p $PORT:$PORT example123; sleep 10
         - curl --retry 10 --retry-delay 5 -v http://localhost:$PORT
 ```
 
@@ -201,7 +201,7 @@ The docker image is saved as an artifact (but of course this is not necessary) s
 If you do not want this, remove this line**
 
 ```
-docker save -o $CIRCLE_ARTIFACTS/example.tar registry.heroku.com/secret-anchorage-45266/web
+docker save -o $CIRCLE_ARTIFACTS/example.tar example123
 ```
 
 ### Helpful resources / References

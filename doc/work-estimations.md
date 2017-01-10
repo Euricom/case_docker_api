@@ -9,8 +9,8 @@
 | Test api Docker in heroku                                                 | 5       | 5         |
 | Test api circle CI build circleci & docker                                | 8       | 5         |
 | Test api circle CI docker + heroku (dev)                                  | 5       | 4         |
-| Test api circle CI docker + heroku (pipeline) + git flow (staging, prod)  | 2       |           |
-| Website circle CI docker + heroku (dev)                                   | 8       |           |
+| Test api circle CI docker + heroku (pipeline) + git flow (staging, prod)  | 2       | 4         |
+| Website circle CI docker + heroku (dev)                                   | 8       | 12        |
 | Website circle CI docker + heroku (staging + prod)                        | 3       |           |
 | Write documentation                                                       | 2       |           |         
 |                                                                           |         |           |
