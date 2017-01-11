@@ -1,7 +1,20 @@
-# If package.json script "deployproduction" is too complex for deploy , we use the following bash script
+REMOTE=wimvandenrul
+NAME=example123
 
-# TODO: Use the staging docker image at docker hub for deployment
-# TODO add parameters for specifying which version to deploy (the docker image must exist of course!) or if parameter was not used , deploy latest version
+# Login to Docker Hub
+docker login
 
-# 1) TODO Load docker image from docker hub (docker pull ? .. get correct version/tag)
-# 2) TODO Push the docker image to heroku (use Heroku toolset ?.) with app name example123-production
+# Get latest docker image
+docker pull $REMOTE/$NAME:latest
+
+# Logout from Docker Hub
+docker logout
+
+# Login to Heroku repository
+docker login --email=_ --username=_ registry.heroku.com
+echo "Successful login to Heroku"
+
+# Deploy to Heroku
+REMOTE=registry.heroku.com
+docker tag $NAME registry.heroku.com/example123-prod/web
+docker push registry.heroku.com/example123-prod/web
