@@ -42,7 +42,6 @@ echo "Successful login to Heroku"
 
 # Deploy to Heroku
 REMOTE=registry.heroku.com
-NAME=example123
 
-docker tag $NAME registry.heroku.com/example123-staging/web
-docker push registry.heroku.com/example123-staging/web
+docker tag $NAME $REMOTE/example123-staging/web
+docker push $REMOTE/example123-staging/web

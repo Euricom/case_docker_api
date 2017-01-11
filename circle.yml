@@ -11,13 +11,13 @@ deployment:
     development:
         branch: develop
         commands:
-            - docker build -t example123 .
-            - docker save -o $CIRCLE_ARTIFACTS/example.tar example123
-            - docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-            - docker tag example123 registry.heroku.com/example123-dev/web
-            - docker push registry.heroku.com/example123-dev/web
+            docker build -t $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/testdocker:latest .
+            docker save -o $CIRCLE_ARTIFACTS/example.tar example123
+            docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+            docker tag example123 registry.heroku.com/example123-dev/web
+            docker push registry.heroku.com/example123-dev/web
     
     production:
         branch: master
         commands:
-            - sh deploy/deploy_staging.sh
+            sh deploy/deploy_staging.sh
