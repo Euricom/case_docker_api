@@ -60,8 +60,8 @@ deploy_to_heroku(){
     echo "Successful login to Heroku"
 
     # Deploy to Heroku
-    docker tag example123 registry.heroku.com/example123-dev/web
-    docker push registry.heroku.com/example123-dev/web
+    docker tag example123 registry.heroku.com/example123-$1/web
+    docker push registry.heroku.com/example123-$1/web
 }
 
 configure_aws_cli
