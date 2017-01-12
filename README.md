@@ -202,6 +202,20 @@ You will see something like this
 5. Add environment variables to Circle CI: *AWS_ACCOUNT_ID*, *AWS_ACCESS_KEY_ID*, *AWS_SECRET_ACCESS_KEY*
    (You can find these when you login to AWS console)
 
+**Required step if your Heroku app name doesn't end with dev or staging"**
+
+If your heroku app name does not end with dev or staging, the docker push won't work.
+You have to edit the argument passed to the deploy script in circle.yml
+Eg if your app name ends with 'development' instead of 'dev'
+
+```
+sh deploy/deploy_dockerhub_heroku.sh dev 
+```
+should be
+```
+sh deploy/deploy_dockerhub_heroku.sh development
+```
+
 **Optional: Edit circle.yml to add some kind of test to see whether the app starts correctly in the container**
 ```
 test:
