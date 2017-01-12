@@ -180,12 +180,27 @@ You will see something like this
 1. Create CircleCI account & Heroku account
 2. Clone this repo example into your own repository
 3. Add the example project to CircleCI
-4. Create a new Heroku app (if you do not have one already)
+4. Create a new Heroku app (if you do not have one already) or more when you have multiple environments (example123-dev, example123-staging, example123-prod in my case)
 5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
 6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
     1. HEROKU_API_KEY: (see step above)
     2. PORT: .. (the port on which the NodeJS server will listen. For example 3000)
-7. Edit the circle.yml file in the root of the example so that "yourappname" is replaced by your app name.
+7. Edit the bash scripts under deploy folder so that "example123" is replaced by your app name.
+
+**Required steps (if you want to use Docker Hub)**
+
+1. Create a Docker Hub account
+2. Create a repository (I chose example123)
+3. Add environment variables to Circle CI: *DOCKER_EMAIL*, *DOCKER_LOGIN*, *DOCKER_PASSWORD*
+
+**Required steps (if you want to use Amazon EC2 Container Registry)**
+
+1. Log in to your AWS account.
+2. Go to EC2 Container Registry.
+3. Create a repository
+4. Find your *AWS Account ID*, *AWS Access Key* and *AWS Secret Key*
+5. Add environment variables to Circle CI: *AWS_ACCOUNT_ID*, *AWS_ACCESS_KEY_ID*, *AWS_SECRET_ACCESS_KEY*
+   (You can find these when you login to AWS console)
 
 **Optional: Edit circle.yml to add some kind of test to see whether the app starts correctly in the container**
 ```
@@ -203,6 +218,12 @@ If you do not want this, remove this line**
 ```
 docker save -o $CIRCLE_ARTIFACTS/example.tar example123
 ```
+
+## Heroku pipeline and Docker
+
+Heroku curently (at time of writing: 12/01/2017) does not support promoting apps that are using Docker (for example staging => production)
+> Promoting an application from staging to production in a Heroku pipeline will fail, yet appear to succeed. We’re working on support for pipelines.
+> From [Heroku](https://devcenter.heroku.com/articles/container-registry-and-runtime)
 
 ## How to test this example app in Docker using different environment settings
 

@@ -2,22 +2,28 @@ machine:
     services:
         - docker
 
-# dependencies:
-#     override:
-#         - docker info
+dependencies:
+     override:
+         - docker info
 
 deployment:
 
     development:
         branch: develop
         commands:
-            - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case_docker_api:latest .
-            - docker save -o $CIRCLE_ARTIFACTS/case_docker_api.tar $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case_docker_api:latest
-            - docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-            - docker tag $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case_docker_api:latest registry.heroku.com/example123-dev/web
-            - docker push registry.heroku.com/example123-dev/web
+
+            # For Docker Hub
+            - sh deploy/deploy_dev_dockerhub_heroku.sh
+            
+            # For Amazon AWS
+            # - sh deploy/deploy_dev_aws_heroku.sh
     
     production:
         branch: master
         commands:
-            - sh deploy/deploy_staging.sh
+
+            # For Docker Hub
+            - sh deploy/deploy_staging_dockerhub_heroku.sh
+            
+            # For Amazon AWS
+            #  - sh deploy/deploy_staging_aws_heroku.sh

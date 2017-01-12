@@ -15,7 +15,7 @@ NAME=example123
 # Build docker image
 docker build -t example123 .
 
-# TODO Save docker image to artifacts folder in Circle CI
+# Save docker image to artifacts folder in Circle CI
 docker save -o $CIRCLE_ARTIFACTS/example123.tar $NAME
 
 # Login to Docker Hub
