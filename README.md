@@ -1,4 +1,4 @@
-# Deploying a NodeJS App (in combination with Zeit, Docker, CircleCI and Heroku)
+# Deploying a NodeJS App (in combination with Zeit, Docker, CircleCI and Heroku/Amazon AWS)
 
 ## Install example app locally
 
@@ -12,7 +12,7 @@ npm install
 npm run start
 ```
 
-Then navigate to `http://localhost:3000/`
+Then navigate to `http://localhost:80/`
 
 ## How to deploy example App to Zeit (without docker)
 
@@ -51,7 +51,7 @@ The app is now deployed to Zeit. Now paste the url in the browser.
 
 ```Docker
 docker build -t example123 .
-docker run example123 -p 3000:3000
+docker run example123 -p 80:80
 ```
 
 You should see something like this:
@@ -64,7 +64,7 @@ You should see something like this:
 > npm info lifecycle example123@0.1.0~start: example123@0.1.0
 > example123@0.1.0 start /usr/src/app
 > node ./server/server
-> Example app listening on port 3000!
+> Example app listening on port 80!
 ```
 ## How to deploy example App to Zeit (with Docker)
 
@@ -88,7 +88,7 @@ Choose 2 , then you will get some output like
 > Building
 > ▲ docker build
 > Removing intermediate container 78fb4c4f6a76
-> Step 7 : EXPOSE 3000
+> Step 7 : EXPOSE 80
 >  ---> Running in 48e2961c596d
 >  ---> 27f016a95062
 > Removing intermediate container 48e2961c596d
@@ -107,7 +107,7 @@ Choose 2 , then you will get some output like
 > npm info lifecycle example123@0.1.0~prestart: example123@0.1.0
 > > example123@0.1.0 start /usr/src/app
 > > node ./server/server
-> Example app listening on port 3000!
+> Example app listening on port 80!
 > Deployment complete!                                                               
 ```
 
@@ -155,7 +155,7 @@ You will see something like this
 > npm info ok
 >  ---> e2f3affa48f7
 > Removing intermediate container 7d9119f19f3c
-> Step 7 : EXPOSE 3000
+> Step 7 : EXPOSE 80
 >  ---> Running in 9a8b57fe6908
 >  ---> b7cb9ee571de
 > Removing intermediate container 9a8b57fe6908
@@ -175,7 +175,7 @@ You will see something like this
 > latest: digest: sha256:676ec9dfd05e3d018d4da4a1a301145bb13184c40f7845506d7f0b73a2c8582c size: 1572
 ```
 
-## How to deploy example App to Heroku (using CircleCI and Docker)
+## How to deploy example App to Heroku using CircleCI and Docker
 
 1. Create CircleCI account & Heroku account
 2. Clone this repo example into your own repository
@@ -184,7 +184,7 @@ You will see something like this
 5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
 6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
     1. HEROKU_API_KEY: (see step above)
-    2. PORT: .. (the port on which the NodeJS server will listen. For example 3000)
+    2. PORT: .. (the port on which the NodeJS server will listen. For example 80)
 7. Edit the bash scripts under deploy folder so that "example123" is replaced by your app name.
 
 **Required steps (if you want to use Docker Hub)**
@@ -202,9 +202,9 @@ You will see something like this
 5. Add environment variables to Circle CI: *AWS_ACCOUNT_ID*, *AWS_ACCESS_KEY_ID*, *AWS_SECRET_ACCESS_KEY*
    (You can find these when you login to AWS console)
 
-**Required step if your Heroku app name doesn't end with dev or staging"**
+**Required step if your Heroku app name doesn't end with -dev or -staging"**
 
-If your heroku app name does not end with dev or staging, the docker push won't work.
+If your heroku app name does not end with -dev or -staging, the docker push won't work.
 You have to edit the argument passed to the deploy script in circle.yml
 Eg if your app name ends with 'development' instead of 'dev'
 
@@ -225,7 +225,7 @@ test:
         - curl --retry 10 --retry-delay 5 -v http://localhost:$PORT
 ```
 
-**Optional:
+**Optional:**
 The docker image is saved as an artifact (but of course this is not necessary) so you can download the docker image after a deployment (you could use this..)
 If you do not want this, remove this line**
 
@@ -233,11 +233,84 @@ If you do not want this, remove this line**
 docker save -o $CIRCLE_ARTIFACTS/example.tar example123
 ```
 
+## How to deploy the example app to Heroku using CircleCI and Amazon EC2 Container Registry for docker image storage
+
+1. Create CircleCI account & Heroku account
+2. Clone this repo example into your own repository
+3. Add the example project to CircleCI
+4. Create a new Heroku app (if you do not have one already) or more when you have multiple environments (example123-dev, example123-staging, example123-prod in my case)
+5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
+6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
+    1. HEROKU_API_KEY: (see step above)
+    2. PORT: .. (the port on which the NodeJS server will listen. For example 80)
+7. Login to AWS Console.
+8. Create a repository on EC2 to hold your docker images (I named it example123)
+9. Add environment variables to Circle CI: *AWS_ACCOUNT_ID*, *AWS_ACCESS_KEY_ID*, *AWS_SECRET_ACCESS_KEY*
+   (You can find these when you login to AWS console)
+10. Uncomment  `- sh deploy/deploy_aws_heroku.sh dev ` in circle.yml and comment `-sh deploy/deploy_dockerhub_heroku.sh dev` so the correct script is launched.
+11. Rename the repository url to match your repository url. 'example123' in the deploy sh script to your repository name and possibly 'dkr.ecr.us-west-2.amazonaws.com' should be changed.
+12. Everything is the same as above except now the docker images are stored on Amazon instead of Docker Hub.
+
+**Required step if your Heroku app name doesn't end with -dev or -staging"**
+
+If your heroku app name does not end with -dev or -staging, the docker push won't work.
+You have to edit the argument passed to the deploy script in circle.yml
+Eg if your app name ends with 'development' instead of 'dev'
+
+```
+sh deploy/deploy_aws_heroku.sh dev 
+```
+should be
+```
+sh deploy/deploy_aws_heroku.sh development
+```
+
+## How to deploy the example app to AWS (not using AWS CLI)
+
+1. You need to set up some basics in Amazon EC2: Create a Amazon EC2 Instance. I chose amzn-ami-2016.09.d-amazon-ecs-optimized (ami-5b6dde3b) because we need a working docker environment in the image.
+   More info here [Amazon ECS-optimized AMI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
+
+   **Useful**
+   You may want to add a key pair to your instance so you can SSH into it later if you experience any problems.
+
+   **Important**
+   I had to add the role AmazonEC2ContainerServiceforEC2Role to my instance otherwise the cluster I created (see below) could not find any instance.
+   See this [Stackoverflow topic](http://stackoverflow.com/questions/36523282/aws-ecs-error-when-running-task-no-container-instances-were-found-in-your-clust)
+   
+2. Create a cluster (a cluster can contain one or more EC2 instances)
+
+3. Create a task definition (this specifies which docker image you want to run).  You can use most default settings, except:
+        
+        1) Set correct container name, repository name and docker image tag
+        2) You need to add a port mapping for running and exposing the ports used by the app. Add port Host 80 and Container port 80, protocol TCP.
+        3) Add environment variables (if you have an app that needs this)
+
+4. Make sure that your repository contains the docker image/tag.
+
+5. Create a Service (set number of tasks to one) and add the previous task definition
+
+5. Make sure that inbound http 80 is set for your instance (configure in security groups)
+
+6. AWS will now try to start the task. Make sure the status is 'RUNNING' and there are no errors in events tab in service.
+   Also check there are no errors in task under container details. 
+
+7. You can find your app url in the current running task under container. (Under column external link)
+
+8. Click the link. Hopefully your app is now displayed.
+
+## How to deploy the example app to AWS (using CircleCI)
+
+**TODO**
+
 ## Heroku pipeline and Docker
 
 Heroku curently (at time of writing: 12/01/2017) does not support promoting apps that are using Docker (for example staging => production)
 > Promoting an application from staging to production in a Heroku pipeline will fail, yet appear to succeed. We’re working on support for pipelines.
 > From [Heroku](https://devcenter.heroku.com/articles/container-registry-and-runtime)
+
+As a workaround: if you want to deploy to production you can launch a bash script from your machine (a manual step that simulates promote).
+- For deploying to docker hub , see an example here: `deploy/deploy_production_dockerhub_heroku.sh`
+- For deploying to AWS container registry, see an example here `deploy/deploy_production_aws_heroku.sh`
 
 ## How to test this example app in Docker using different environment settings
 
@@ -265,7 +338,8 @@ docker-compose -f docker-compose.production.yml up
 As an example you will see there is a different environment setting for a database connection string in this project.
 This can be useful if you want to test the docker image on your local docker machine using a development database or rather connect to production database (or maybe another database..)
 
-### Helpful resources / References
+
+## Helpful resources / References
 
 #### Zeit
 
@@ -289,4 +363,15 @@ This can be useful if you want to test the docker image on your local docker mac
 #### CircleCI with Docker
 
 [CircleCI and docker](https://circleci.com/docs/docker/)
+
+#### CircleCI with AWS
+
+[CircleCI and AWS](http://mohtasebi.com/docker/aws/2016/03/08/ci-using-aws-ecs-docker.html)
  
+#### Amazon EC2 Container Service
+
+[Amazon Developer guide EC2 Container Service](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html)
+
+#### Amazon EC2 Container Service Deploy Docker Containers
+
+[Deploy Docker container: tutorial](https://aws.amazon.com/getting-started/tutorials/deploy-docker-containers/)

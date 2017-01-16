@@ -9,7 +9,7 @@ COPY . /usr/src/app
 RUN npm install --production
 
 # Expose port in container
-EXPOSE 3000
+EXPOSE 80
 
 # Start NPM (executes node ./server/server through package.json)
 CMD [ "npm", "start" ]

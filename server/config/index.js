@@ -1,6 +1,6 @@
 const cfg = {
     env: process.env.NODE_ENV || 'dev',
-    port: process.env.PORT || '3000',
+    port: 80,
     mongo: {
         uri: process.env.MONGODB_URI || 'mongodb://localhost/euricomsite',
     },

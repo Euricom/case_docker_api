@@ -16,7 +16,7 @@ deployment:
             - sh deploy/deploy_dockerhub_heroku.sh dev
             
             # For Amazon AWS
-            # - sh deploy/deploy_dev_aws_heroku.sh
+            # - sh deploy/deploy_aws_heroku.sh dev
     
     production:
         branch: master
@@ -26,4 +26,4 @@ deployment:
             - sh deploy/deploy_dockerhub_heroku.sh staging
             
             # For Amazon AWS
-            #  - sh deploy/deploy_staging_aws_heroku.sh
+            #  - sh deploy/deploy_aws_heroku.sh staging
