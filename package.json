@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node ./server/server",
     "lint": "eslint .",
-    "test": "ls",
-    "deployproduction": "echo 'TODO add deployment script'"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "body-parser": "~1.15.2",
