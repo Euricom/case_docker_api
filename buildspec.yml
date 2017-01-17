@@ -10,9 +10,10 @@ environmentVariables:
 phases:
   install:
     commands:
+      - echo Installing NPM and NodeJS
+      - apk update && apk add nodejs
       - echo Installing Mocha...
       - npm install -g mocha
-      - apk update && apk add nodejs
   pre_build:
     commands:
       - echo running tests
