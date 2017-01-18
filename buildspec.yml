@@ -16,16 +16,20 @@ phases:
       - sudo apt-get --yes --force-yes install npm
       - echo Installing Mocha...
       - npm install -g mocha
+      - echo Mocha installed
+      - ln -s /usr/bin/nodejs /usr/bin/node
+      - node -v
+      - npm -v
+      - mocha -V
   pre_build:
     commands:
-      - echo running tests
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION)
   build:
     commands:
       - npm run test
       - echo Build started on `date`
-      - echo Building the Docker image...          
+      - echo Building the Docker image...        
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
