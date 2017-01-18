@@ -11,9 +11,9 @@ phases:
   install:
     commands:
       - echo Installing NPM and NodeJS
-      - sudo apt-get update
-      - sudo apt-get install nodejs
-      - sudo apt-get install npm
+      - sudo apt-get --yes --force-yes update
+      - sudo apt-get --yes --force-yes install nodejs
+      - sudo apt-get --yes --force-yes install npm
       - echo Installing Mocha...
       - npm install -g mocha
   pre_build:
