@@ -1,0 +1,17 @@
+{
+ "AWSEBDockerrunVersion": "1",
+ "Authentication": {
+   "Bucket": "case-docker-api-auth",
+   "Key": "config.json"
+ },
+ "Image": {
+    "Name": "708547824206.dkr.ecr.us-west-2.amazonaws.com/example123:latest",
+    "Update": "true"
+  },
+ "Ports": [
+   {
+     "ContainerPort": "80"
+   }
+ ],
+ "Logging": "/var/log"
+}
