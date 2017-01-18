@@ -17,7 +17,6 @@ phases:
       - echo Installing Mocha...
       - npm install -g mocha
       - echo Mocha installed
-      - ln -s /usr/bin/nodejs /usr/bin/node
       - node -v
       - npm -v
       - mocha -V
