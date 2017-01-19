@@ -32,4 +32,4 @@ deployment:
             #  - sh deploy/deploy_aws_heroku.sh staging
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-staging
-            # - sh deploy/deploy_aws_elasticbeanstalk_staging.sh
+            - sh deploy/deploy_aws_elasticbeanstalk_staging.sh
