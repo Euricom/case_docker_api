@@ -12,24 +12,24 @@ deployment:
         branch: develop
         commands:
 
-            # For Docker Hub
+            # For deploying to Heroku using Docker Hub
             - sh deploy/deploy_dockerhub_heroku.sh dev
             
             # For deploying to Heroku using Amazon Container Service for docker images
-            # - sh deploy/deploy_using_awsdockerrepo_heroku.sh dev
+            - sh deploy/deploy_using_awsdockerrepo_heroku.sh dev
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-dev
-            - sh deploy/deploy_aws_elasticbeanstalk_dev.sh
+            - sh deploy/deploy_aws_elasticbeanstalk.sh dev case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2
     
     production:
         branch: master
         commands:
 
-            # For Docker Hub
+            # For deploying to Heroku using Docker Hub
             - sh deploy/deploy_dockerhub_heroku.sh staging
             
-            # For Amazon AWS
-            #  - sh deploy/deploy_aws_heroku.sh staging
+            # For deploying to Heroku using Amazon Container Service for docker images
+            - sh deploy/deploy_using_awsdockerrepo_heroku.sh staging
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-staging
-            - sh deploy/deploy_aws_elasticbeanstalk_staging.sh
+            - sh deploy/deploy_aws_elasticbeanstalk.sh staging case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2

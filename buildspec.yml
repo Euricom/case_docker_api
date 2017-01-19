@@ -4,7 +4,7 @@ environmentVariables:
     plaintext:
         AWS_DEFAULT_REGION: "us-west-2"
         AWS_ACCOUNT_ID: "708547824206"
-        IMAGE_REPO_NAME: "example123"
+        IMAGE_REPO_NAME: "case-docker-api"
         IMAGE_TAG: "latest"
         PORT: "80"
 

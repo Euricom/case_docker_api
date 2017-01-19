@@ -29,7 +29,7 @@ You should see something like this
 ```
 > Deploying ~\Documents\git\case_docker_api\server
 > Using Node.js 7.0.0 (default)
-> Ready! https://example123-kkoizhpoud.now.sh (copied to clipboard) [2s]
+> Ready! https://case-docker-api-kkoizhpoud.now.sh (copied to clipboard) [2s]
 > Upload [====================] 100% 0.0s
 > Sync complete (1.77kB) [1s]
 > Initializing…
@@ -50,8 +50,8 @@ The app is now deployed to Zeit. Now paste the url in the browser.
 ## How to deploy example App to a Local Docker Machine
 
 ```Docker
-docker build -t example123 .
-docker run example123 -p 80:80
+docker build -t case-docker-api .
+docker run case-docker-api -p 80:80
 ```
 
 You should see something like this:
@@ -60,9 +60,9 @@ You should see something like this:
 > npm info it worked if it ends with ok
 > npm info using npm@3.10.10
 > npm info using node@v7.3.0
-> npm info lifecycle example123@0.1.0~prestart: example123@0.1.0
-> npm info lifecycle example123@0.1.0~start: example123@0.1.0
-> example123@0.1.0 start /usr/src/app
+> npm info lifecycle case-docker-api@0.1.0~prestart: case-docker-api@0.1.0
+> npm info lifecycle case-docker-api@0.1.0~start: case-docker-api@0.1.0
+> case-docker-api@0.1.0 start /usr/src/app
 > node ./server/server
 > Example app listening on port 80!
 ```
@@ -103,9 +103,9 @@ Choose 2 , then you will get some output like
 > npm info it worked if it ends with ok
 > npm info using npm@3.10.10
 > npm info using node@v7.3.0
-> npm info lifecycle example123@0.1.0~start: example123@0.1.0
-> npm info lifecycle example123@0.1.0~prestart: example123@0.1.0
-> > example123@0.1.0 start /usr/src/app
+> npm info lifecycle case-docker-api@0.1.0~start: case-docker-api@0.1.0
+> npm info lifecycle case-docker-api@0.1.0~prestart: case-docker-api@0.1.0
+> > case-docker-api@0.1.0 start /usr/src/app
 > > node ./server/server
 > Example app listening on port 80!
 > Deployment complete!                                                               
@@ -147,11 +147,11 @@ You will see something like this
 > npm info it worked if it ends with ok
 > npm info using npm@3.10.10
 > npm info using node@v7.3.0
-> npm info lifecycle example123@0.1.0~preinstall: example123@0.1.0
-> npm info linkStuff example123@0.1.0
-> npm info lifecycle example123@0.1.0~install: example123@0.1.0
-> npm info lifecycle example123@0.1.0~postinstall: example123@0.1.0
-> npm info lifecycle example123@0.1.0~prepublish: example123@0.1.0
+> npm info lifecycle case-docker-api@0.1.0~preinstall: case-docker-api@0.1.0
+> npm info linkStuff case-docker-api@0.1.0
+> npm info lifecycle case-docker-api@0.1.0~install: case-docker-api@0.1.0
+> npm info lifecycle case-docker-api@0.1.0~postinstall: case-docker-api@0.1.0
+> npm info lifecycle case-docker-api@0.1.0~prepublish: case-docker-api@0.1.0
 > npm info ok
 >  ---> e2f3affa48f7
 > Removing intermediate container 7d9119f19f3c
@@ -165,7 +165,7 @@ You will see something like this
 > Removing intermediate container 3742e9cd9271
 > Successfully built 6aa1efeb0a45
 > SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
-> The push refers to a repository [registry.heroku.com/example123-dev/web]
+> The push refers to a repository [registry.heroku.com/case-docker-api-dev/web]
 > af423bb0e78f: Pushed
 > 5d40bb2d896f: Pushed
 > 1c809f2c94c1: Pushed
@@ -180,17 +180,17 @@ You will see something like this
 1. Create CircleCI account & Heroku account
 2. Clone this repo example into your own repository
 3. Add the example project to CircleCI
-4. Create a new Heroku app (if you do not have one already) or more when you have multiple environments (example123-dev, example123-staging, example123-prod in my case)
+4. Create a new Heroku app (if you do not have one already) or more when you have multiple environments (case-docker-api-dev, case-docker-api-staging, case-docker-api-prod in my case)
 5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
 6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
     1. HEROKU_API_KEY: (see step above)
     2. PORT: .. (the port on which the NodeJS server will listen. For example 80)
-7. Edit the bash scripts under deploy folder so that "example123" is replaced by your app name.
+7. Edit the bash scripts under deploy folder so that "case-docker-api" is replaced by your app name.
 
 **Required steps (if you want to use Docker Hub)**
 
 1. Create a Docker Hub account
-2. Create a repository (I chose example123)
+2. Create a repository (I chose case-docker-api)
 3. Add environment variables to Circle CI: *DOCKER_EMAIL*, *DOCKER_LOGIN*, *DOCKER_PASSWORD*
 
 **Required steps (if you want to use Amazon EC2 Container Registry)**
@@ -220,8 +220,8 @@ sh deploy/deploy_dockerhub_heroku.sh development
 ```
 test:
     post:
-        - docker build -t example123 .
-        - docker run -d -p $PORT:$PORT example123; sleep 10
+        - docker build -t case-docker-api .
+        - docker run -d -p $PORT:$PORT case-docker-api; sleep 10
         - curl --retry 10 --retry-delay 5 -v http://localhost:$PORT
 ```
 
@@ -230,7 +230,7 @@ The docker image is saved as an artifact (but of course this is not necessary) s
 If you do not want this, remove this line**
 
 ```
-docker save -o $CIRCLE_ARTIFACTS/example.tar example123
+docker save -o $CIRCLE_ARTIFACTS/example.tar case-docker-api
 ```
 
 ## How to deploy the example app to Heroku using CircleCI and Amazon EC2 Container Registry for docker image storage
@@ -238,17 +238,17 @@ docker save -o $CIRCLE_ARTIFACTS/example.tar example123
 1. Create CircleCI account & Heroku account
 2. Clone this repo example into your own repository
 3. Add the example project to CircleCI
-4. Create a new Heroku app (if you do not have one already) or more when you have multiple environments (example123-dev, example123-staging, example123-prod in my case)
+4. Create a new Heroku app (if you do not have one already) or more when you have multiple environments (case-docker-api-dev, case-docker-api-staging, case-docker-api-prod in my case)
 5. Copy your Heroku API key from your [Heroku account](https://dashboard.heroku.com/account)
 6. In CircleCI Go to "Build Settings", then "Environment variables" and add these 2 variables
     1. HEROKU_API_KEY: (see step above)
     2. PORT: .. (the port on which the NodeJS server will listen. For example 80)
 7. Login to AWS Console.
-8. Create a repository on EC2 to hold your docker images (I named it example123)
+8. Create a repository on EC2 to hold your docker images (I named it case-docker-api)
 9. Add environment variables to Circle CI: *AWS_ACCOUNT_ID*, *AWS_ACCESS_KEY_ID*, *AWS_SECRET_ACCESS_KEY*
    (You can find these when you login to AWS console)
 10. Uncomment  `- sh deploy/deploy_aws_heroku.sh dev ` in circle.yml and comment `-sh deploy/deploy_dockerhub_heroku.sh dev` so the correct script is launched.
-11. Rename the repository url to match your repository url. 'example123' in the deploy sh script to your repository name and possibly 'dkr.ecr.us-west-2.amazonaws.com' should be changed.
+11. Rename the repository url to match your repository url. 'case-docker-api' in the deploy sh script to your repository name and possibly 'dkr.ecr.us-west-2.amazonaws.com' should be changed.
 12. Everything is the same as above except now the docker images are stored on Amazon instead of Docker Hub.
 
 **Required step if your Heroku app name doesn't end with -dev or -staging"**
@@ -265,7 +265,7 @@ should be
 sh deploy/deploy_aws_heroku.sh development
 ```
 
-## How to deploy the example app to AWS (not using AWS CLI)
+## How to deploy the example app to AWS
 
 1. You need to set up some basics in Amazon EC2: Create a Amazon EC2 Instance. I chose amzn-ami-2016.09.d-amazon-ecs-optimized (ami-5b6dde3b) because we need a working docker environment in the image.
    More info here [Amazon ECS-optimized AMI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
@@ -298,9 +298,6 @@ sh deploy/deploy_aws_heroku.sh development
 
 8. Click the link. Hopefully your app is now displayed.
 
-## How to deploy the example app to AWS (using CircleCI)
-
-**TODO**
 
 ## Heroku pipeline and Docker
 

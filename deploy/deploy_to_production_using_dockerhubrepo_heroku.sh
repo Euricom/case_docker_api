@@ -1,5 +1,5 @@
 REMOTE=wimvandenrul
-NAME=example123
+NAME=case-docker-api
 
 # Login to Docker Hub
 docker login
@@ -16,5 +16,5 @@ echo "Successful login to Heroku"
 
 # Deploy to Heroku
 REMOTE=registry.heroku.com
-docker tag $REMOTE/$NAME registry.heroku.com/example123-prod/web
-docker push registry.heroku.com/example123-prod/web
+docker tag $REMOTE/$NAME registry.heroku.com/case-docker-api-prod/web
+docker push registry.heroku.com/case-docker-api-prod/web

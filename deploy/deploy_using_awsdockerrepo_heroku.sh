@@ -24,23 +24,23 @@ push_ecr_image(){
     echo $AWS_ACCOUNT_ID
 
     # Build docker image
-    docker build -t example123 .
+    docker build -t case-docker-api .
     echo 'Building done'
 
     # Tag docker image
-    docker tag example123:latest $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/example123:latest
+    docker tag case-docker-api:latest $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case-docker-api:latest
     echo 'Tagging latest done'
 
     # Push docker image to Amazon EC2 Container Registry
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/example123:latest
+    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case-docker-api:latest
     echo 'Pushing latest done'
 
     # Tag docker image
-    docker tag example123 $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/example123:$VERSION
+    docker tag case-docker-api $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case-docker-api:$VERSION
     echo 'Tagging $VERSION done'
 
     # Push docker image to Amazon EC2 Container Registry
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/example123:$VERSION
+    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/case-docker-api:$VERSION
     echo 'Pushing $VERSION done'
 
     docker logout
@@ -48,9 +48,9 @@ push_ecr_image(){
 }
 
 cleanup_ecr_images(){
-    # aws ecr batch-delete-image --repository-name example123 --image-ids $(aws ecr list-images --repository-name example123 -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
+    # aws ecr batch-delete-image --repository-name case-docker-api --image-ids $(aws ecr list-images --repository-name case-docker-api -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
     # (previous oneliner not working anymore?)
-    aws ecr list-images --repository-name example123 --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name example123 --image-ids imageDigest=$line; done
+    aws ecr list-images --repository-name case-docker-api --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name case-docker-api --image-ids imageDigest=$line; done
 }
 
 deploy_to_heroku(){
@@ -60,8 +60,8 @@ deploy_to_heroku(){
     echo "Successful login to Heroku"
 
     # Deploy to Heroku
-    docker tag example123 registry.heroku.com/example123-$1/web
-    docker push registry.heroku.com/example123-$1/web
+    docker tag case-docker-api registry.heroku.com/case-docker-api-$1/web
+    docker push registry.heroku.com/case-docker-api-$1/web
 }
 
 configure_aws_cli
