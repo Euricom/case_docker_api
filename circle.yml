@@ -12,11 +12,14 @@ deployment:
         branch: develop
         commands:
 
-            # For deploying to Heroku using Docker Hub
-            - sh deploy/deploy_dockerhub_heroku.sh dev case-docker-api
+            # For deploying to Heroku (not using Docker Hub for storage)
+            # - sh deploy/deploy_heroku.sh dev case-docker-api
+
+            # For deploying to Heroku (and storing docker image to Docker Hub)
+            - sh deploy/deploy_using_dockerhubrepo_heroku.sh dev case-docker-api euri
             
             # For deploying to Heroku using Amazon Container Service for docker images
-            - sh deploy/deploy_using_awsdockerrepo_heroku.sh dev case-docker-api us-west-2
+            # - sh deploy/deploy_using_awsdockerrepo_heroku.sh dev case-docker-api us-west-2
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-dev
             - sh deploy/deploy_aws_elasticbeanstalk.sh dev case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2
@@ -24,12 +27,14 @@ deployment:
     production:
         branch: master
         commands:
+            # For deploying to Heroku (not using Docker Hub for storage)
+            # - sh deploy/deploy_heroku.sh staging case-docker-api
 
-            # For deploying to Heroku using Docker Hub
-            - sh deploy/deploy_dockerhub_heroku.sh staging case-docker-api
+            # For deploying to Heroku (and storing docker image to Docker Hub)
+            - sh deploy/deploy_using_dockerhubrepo_heroku.sh staging case-docker-api euri
             
             # For deploying to Heroku using Amazon Container Service for docker images
-            - sh deploy/deploy_using_awsdockerrepo_heroku.sh staging case-docker-api us-west-2
+            # - sh deploy/deploy_using_awsdockerrepo_heroku.sh staging case-docker-api us-west-2
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-staging
             - sh deploy/deploy_aws_elasticbeanstalk.sh staging case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2

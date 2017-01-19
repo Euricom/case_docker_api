@@ -175,6 +175,18 @@ You will see something like this
 > latest: digest: sha256:676ec9dfd05e3d018d4da4a1a301145bb13184c40f7845506d7f0b73a2c8582c size: 1572
 ```
 
+## How to deploy example App to Heroku (without CI and store image to Docker hub)
+
+Pass correct values to script `deploy_using_dockerhubrepo_heroku`. 
+For example sh -x deploy/deploy_using_dockerrepo_heroku.sh **dev** **case-docker-api** **euri**
+In this example, the docker image is stored at https://hub.docker.com/r/euri/case-docker-api/
+
+First parameter is the Heroku environment name.
+Second parameter is the appname / Docker app name 
+Third parameter is the Docker hub repository name
+
+During execution of script you will be asked your Docker Hub login and your Heroku API key.
+
 ## How to deploy example App to Heroku using CircleCI and Docker
 
 1. Create CircleCI account & Heroku account
