@@ -16,7 +16,7 @@ deployment:
             # - sh deploy/deploy_heroku.sh dev case-docker-api
 
             # For deploying to Heroku (and storing docker image to Docker Hub)
-            - sh deploy/deploy_using_dockerhubrepo_heroku.sh dev case-docker-api euri
+            # - sh deploy/deploy_using_dockerhubrepo_heroku.sh dev case-docker-api euri
             
             # For deploying to Heroku using Amazon Container Service for docker images
             # - sh deploy/deploy_using_awsdockerrepo_heroku.sh dev case-docker-api us-west-2
@@ -31,7 +31,7 @@ deployment:
             # - sh deploy/deploy_heroku.sh staging case-docker-api
 
             # For deploying to Heroku (and storing docker image to Docker Hub)
-            - sh deploy/deploy_using_dockerhubrepo_heroku.sh staging case-docker-api euri
+            # - sh deploy/deploy_using_dockerhubrepo_heroku.sh staging case-docker-api euri
             
             # For deploying to Heroku using Amazon Container Service for docker images
             # - sh deploy/deploy_using_awsdockerrepo_heroku.sh staging case-docker-api us-west-2

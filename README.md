@@ -178,7 +178,7 @@ You will see something like this
 ## How to deploy example App to Heroku (without CI and store image to Docker hub)
 
 Pass correct values to script `deploy_using_dockerhubrepo_heroku`. 
-For example sh -x deploy/deploy_using_dockerrepo_heroku.sh **dev** **case-docker-api** **euri**
+For example `sh -x deploy/deploy_using_dockerrepo_heroku.sh dev case-docker-api euri`
 In this example, the docker image is stored at https://hub.docker.com/r/euri/case-docker-api/
 
 First parameter is the Heroku environment name.
