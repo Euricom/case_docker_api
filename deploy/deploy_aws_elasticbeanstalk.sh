@@ -57,7 +57,7 @@ deploy_to_aws(){
 
         GIT_HASH=$(git describe --always)
         VERSION_LABEL=development_$GIT_HASH
-
+        
     # Else if staging, set label to version
     else
 
