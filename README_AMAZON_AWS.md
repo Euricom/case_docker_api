@@ -136,8 +136,7 @@ The script contains a simple Mocha test. If the test passes, it will
 2) Build a docker image of your current build, 
 3) Store this docker image,
 4) Deploy to the correct ElasticBeanstalk environment.
-     For Dev: it will create a version label: development_GITHASH. This makes it very easy to see which version is currently on dev environment (you see this in the web interface of ElasticBeanstalk).
-            We do not store multiple versions of dev because it isn't necessary.
+     For Dev: it will create a version label: development_GITHASH. **Important: because we only store 1 docker image for dev this hash doesn't 
      For staging: it will create a version label which is the current version of package.json
 
 ## Preparation AWS
