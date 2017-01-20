@@ -9,9 +9,13 @@ set -e
 VERSION=$(node server/extractversion.js)
 echo $VERSION
 
+ENVIRONMENT=$1
+AWS_APP=$2
+REGION=$3
+
 configure_aws_cli(){
 	aws --version
-	aws configure set default.region $3
+	aws configure set default.region $REGION
 }
 
 login_aws(){
@@ -24,23 +28,23 @@ push_ecr_image(){
     echo $AWS_ACCOUNT_ID
 
     # Build docker image
-    docker build -t $2 .
+    docker build -t $AWS_APP .
     echo 'Building done'
 
     # Tag docker image
-    docker tag $2:latest $AWS_ACCOUNT_ID.dkr.ecr.$3.amazonaws.com/$2:latest
+    docker tag $AWS_APP:latest $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:latest
     echo 'Tagging latest done'
 
     # Push docker image to Amazon EC2 Container Registry
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$2:latest
+    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$AWS_APP:latest
     echo 'Pushing latest done'
 
     # Tag docker image
-    docker tag $2 $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$2:$VERSION
+    docker tag $AWS_APP $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$AWS_APP:$VERSION
     echo 'Tagging $VERSION done'
 
     # Push docker image to Amazon EC2 Container Registry
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$2:$VERSION
+    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$AWS_APP:$VERSION
     echo 'Pushing $VERSION done'
 
     docker logout
@@ -48,9 +52,9 @@ push_ecr_image(){
 }
 
 cleanup_ecr_images(){
-    # aws ecr batch-delete-image --repository-name $2 --image-ids $(aws ecr list-images --repository-name $2 -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
+    # aws ecr batch-delete-image --repository-name $AWS_APP --image-ids $(aws ecr list-images --repository-name $AWS_APP -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
     # (previous oneliner not working anymore?)
-    aws ecr list-images --repository-name $2 --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name $2 --image-ids imageDigest=$line; done
+    aws ecr list-images --repository-name $AWS_APP --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name $AWS_APP --image-ids imageDigest=$line; done
 }
 
 deploy_to_heroku(){
@@ -60,10 +64,10 @@ deploy_to_heroku(){
     echo "Successful login to Heroku"
 
     # Deploy to Heroku
-    APP_NAME=$2-$1
+    APP_NAME=$AWS_APP-$ENVIRONMENT
     echo 'Heroku app name='
     echo $APP_NAME
-    docker tag $2 registry.heroku.com/$APP_NAME/web
+    docker tag $AWS_APP registry.heroku.com/$APP_NAME/web
     docker push registry.heroku.com/$APP_NAME/web
 }
 

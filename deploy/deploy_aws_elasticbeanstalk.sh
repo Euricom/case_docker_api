@@ -9,9 +9,16 @@ set -e
 VERSION=$(node server/extractversion.js)
 echo $VERSION
 
+ENVIRONMENT=$1
+AWS_APP=$2
+EB_BUCKET=$3
+REGION=$4
+AWS_APP_ENVIRONMENT=$5 
+
 configure_aws_cli(){
+    echo $REGION
 	aws --version
-	aws configure set default.region $4
+	aws configure set default.region $REGION
 }
 
 login_aws(){
@@ -21,16 +28,39 @@ login_aws(){
 push_ecr_image(){
 
     # Build docker image
-    docker build -t $2 .
+    docker build -t $AWS_APP .
     echo 'Building done'
 
-    # Tag docker image
-    docker tag $2:latest $AWS_ACCOUNT_ID.dkr.ecr.$4.amazonaws.com/$2:dev
-    echo 'Tagging dev done'
+     # If development, create docker image with tag :dev
+    if [ $ENVIRONMENT = "dev" ]; then
 
-    # Push docker image to Amazon EC2 Container Registry
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.$4.amazonaws.com/$2:dev
-    echo 'Pushing dev done'
+        # Tag docker image
+        docker tag $AWS_APP:latest $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:dev
+        echo 'Tagging dev done'
+
+        # Push docker image to Amazon EC2 Container Registry
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:dev
+        echo 'Pushing dev done'
+
+    else
+
+        # Tag docker image
+        docker tag $AWS_APP:latest $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:latest
+        echo 'Tagging latest done'
+
+        # Push docker image to Amazon EC2 Container Registry
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:latest
+        echo 'Pushing latest done'
+
+        # Tag docker image
+        docker tag $AWS_APP:latest $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:$VERSION
+        echo 'Tagging $VERSION done'
+
+        # Push docker image to Amazon EC2 Container Registry
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$AWS_APP:$VERSION
+        echo 'Pushing $VERSION done'
+
+    fi
 
     docker logout
     echo 'Docker logout done'
@@ -39,18 +69,15 @@ push_ecr_image(){
 cleanup_ecr_images(){
     # aws ecr batch-delete-image --repository-name case-docker-api --image-ids $(aws ecr list-images --repository-name case-docker-api -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
     # (previous oneliner not working anymore?)
-    aws ecr list-images --repository-name $2 --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name $2 --image-ids imageDigest=$line; done
+    aws ecr list-images --repository-name $AWS_APP --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name $AWS_APP --image-ids imageDigest=$line; done
 }
 
 deploy_to_aws(){
 
-    APP_NAME=$2
-    EB_BUCKET=$3
     ZIP=$VERSION.zip
-    APP_ENVIRONMENT=$2-dev
 
     # If development
-    if [ $1 = "dev" ]; then
+    if [ $ENVIRONMENT = "dev" ]; then
 
         # Zip up the Dockerrun.aws.json file. The zip name is the $VERSION.zip. The contents of the zip is the Dockerrun.aws.json
         zip -j deploy/$ZIP deploy/aws_dev/Dockerrun.aws.json
@@ -70,11 +97,11 @@ deploy_to_aws(){
     aws s3 cp deploy/$ZIP s3://$EB_BUCKET/$ZIP
     
     # Create a new application version with the zipped up Dockerrun file
-    aws elasticbeanstalk create-application-version --application-name $APP_NAME \
+    aws elasticbeanstalk create-application-version --application-name $AWS_APP \
         --version-label $VERSION_LABEL --source-bundle S3Bucket=$EB_BUCKET,S3Key=$ZIP
 
     # Update the environment to use the new application version
-    aws elasticbeanstalk update-environment --environment-name $APP_ENVIRONMENT \
+    aws elasticbeanstalk update-environment --environment-name $AWS_APP_ENVIRONMENT \
         --version-label $VERSION_LABEL
 }
 
