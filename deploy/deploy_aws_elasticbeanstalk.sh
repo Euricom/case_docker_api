@@ -101,7 +101,9 @@ deploy_to_aws(){
         ZIP=$VERSION.zip
 
         IMAGE_NAME=$DOCKER_REPO
-        IMAGE_NAME+=:$VERSION
+        IMAGE_NAME+=":"
+        IMAGE_NAME+=$VERSION
+        echo $IMAGE_NAME
 
         # Edit the Dockerrun.aws.json so that the tag is the correct version tag
         cat deploy/aws_staging/Dockerrun.aws.json | jq --arg v "$IMAGE_NAME"  '.Image.Name=$v' > deploy/aws_staging/tmp.$$.json && mv deploy/aws_staging/tmp.$$.json deploy/aws_staging/Dockerrun.aws.json
