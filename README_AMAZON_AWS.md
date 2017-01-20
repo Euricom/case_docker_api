@@ -32,6 +32,59 @@
 8. Click the link. Hopefully your app is now displayed.
 
 
+# How to deploy the example app to Amazon AWS (using Elastic Beanstalk) (and using CodeBuild/CodePipeline)
+
+In this repository a sample **buildspec.yml** is included. CodeBuild uses this information to know how to build your project.
+(*it's the same as the circle.yml for CircleCI*).
+
+Because AWS CodeBuild currently doesn't offer us a Docker image that has NodeJs installed I do install NodeJS and npm into the docker image.
+Also Mocha is being installed to run tests before deploying.
+
+See http://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref.html
+
+Ubuntu 14.04	Docker	1.11.2	AWS CLI, Git 1.9.1, pip 8.1.2, Python 2.7	aws/codebuild/docker:1.11.2
+Ubuntu 14.04	Docker	1.12.1	AWS CLI, Git 1.9.1, pip 8.1.2, Python 2.7	aws/codebuild/docker:1.12.1
+
+*Note: A better scenario would be that we create a custom docker image and use that for CodeBuild so we don't have to install each package again and again.
+But this works good enough for me now.*
+
+Setting up **CodeBuild** isn't that hard. Just give it some basic information like 
+- Name of your app/project
+- Source of your project (github, ..)
+- How to build (what docker image to use. I used **aws/codebuild/docker:1.12.1**)
+- Specify you want to use existing **buildspec.yml** in the source code root directory
+- Add environment variables if necessary
+
+Creating a **CodePipeline** is also easy using the web interface.
+
+See my example:
+
+![Code Pipeline example](doc/2017-01-20 13_56_32-AWS CodePipeline Management Console.png)
+
+I have added like 5 stages (and each stage consists of one ore more actions): 
+
+- Source
+    - Source_dev
+    - Source_master
+- Build
+    - Build_dev
+    - Build_master
+- Deploy
+    - Deploy_dev
+    - Deploy_master
+- Approve
+    - Approve
+- Production
+    - Deploy_production
+
+But CodeBuild/CodePipeline has some limitations in my opinion:
+
+- When a build for dev is triggered it triggers a deploy for dev and staging (it should only deploy to dev).
+- There is no integration possible between CodePipeline and CircleCI (if you don't want to use CodeBuild)
+- Tests that fail in CodeBuild are not easy to retrieve. You must first download the logs and search in the logs.
+  Whereas in CircleCI you see it a lot faster because you see output for each building step (and you can add a Test tab there for displaying all tests)
+
+
 # How to deploy the example app to Amazon AWS (using Elastic Beanstalk) (and using CircleCI)
 
 This guide will help you deploy a Docker application to AWS Elastic Beanstalk.
@@ -162,8 +215,14 @@ Now if you commit to develop branch or master branch, it should automatically de
 
 If you want to deploy to production you can use the web interface of Elastic Beanstalk. Just go to Application Versions, choose your version and click 'Deploy'. Finally you choose the environment (=production)
 
-## Helpful resources / References
+# Helpful resources / References
 
 [What is Elastic Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 
 [Full example on how to deploy to Elastic Beanstalk](https://gist.github.com/yefim/93fb5aa3291b3843353794127804976f)
+
+[CircleCI and AWS](http://mohtasebi.com/docker/aws/2016/03/08/ci-using-aws-ecs-docker.html)
+
+[Amazon Developer guide EC2 Container Service](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html)
+
+[Deploy Docker container: tutorial](https://aws.amazon.com/getting-started/tutorials/deploy-docker-containers/)

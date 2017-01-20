@@ -67,7 +67,7 @@ push_ecr_image(){
 }
 
 cleanup_ecr_images(){
-    # aws ecr batch-delete-image --repository-name case-docker-api --image-ids $(aws ecr list-images --repository-name case-docker-api -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
+    # aws ecr batch-delete-image --repository-name $AWS_APP --image-ids $(aws ecr list-images --repository-name $AWS_APP -- filter tagStatus=UNTAGGED --query 'imageIds[*]'| tr -d " \t\n\r")
     # (previous oneliner not working anymore?)
     aws ecr list-images --repository-name $AWS_APP --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name $AWS_APP --image-ids imageDigest=$line; done
 }
