@@ -112,6 +112,7 @@ The script contains a simple Mocha test. If the test passes, it will
             Second parameter is your application name in Elastic Beanstalk
             Third parameter is your bucket name
             Fourth parameter is the region (it is important!)
+            Fifth parameter is your AWS ElasticBeanstalk app environment name
 
         *Note: You can also use environment variables in CircleCI instead of passing these hardcoded in circle.yml.* 
 
