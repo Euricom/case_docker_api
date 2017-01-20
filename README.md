@@ -65,11 +65,11 @@ See [Readme Case Docker API Zeit](README_ZEIT.md)
 
 ## Deploying to Heroku
 
-See [Readme Case Docker API Heroku](README_Heroku.md)
+See [Readme Case Docker API Heroku](README_HEROKU.md)
 
 ## Deploying to AWS Elastic Beanstalk
 
-See [Readme Case Docker API AWS Elastic Beanstalk](https://github.com/Euricom/case_docker_api/blob/master/README_AMAZON_AWS.md)
+See [Readme Case Docker API AWS Elastic Beanstalk](README_AMAZON_AWS.md)
 
 # Helpful resources / References
 
