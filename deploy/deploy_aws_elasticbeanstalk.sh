@@ -100,9 +100,7 @@ deploy_to_aws(){
         echo 'Dockerrun.aws.json = STAGING'
         ZIP=$VERSION.zip
 
-        IMAGE_NAME=$DOCKER_REPO
-        IMAGE_NAME+=":"
-        IMAGE_NAME+=$VERSION
+        IMAGE_NAME=$DOCKER_REPO:$VERSION
         echo $IMAGE_NAME
 
         # Edit the Dockerrun.aws.json so that the tag is the correct version tag
