@@ -277,40 +277,6 @@ should be
 sh deploy/deploy_aws_heroku.sh development
 ```
 
-## How to deploy the example app to AWS
-
-1. You need to set up some basics in Amazon EC2: Create a Amazon EC2 Instance. I chose amzn-ami-2016.09.d-amazon-ecs-optimized (ami-5b6dde3b) because we need a working docker environment in the image.
-   More info here [Amazon ECS-optimized AMI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
-
-   **Useful**
-   You may want to add a key pair to your instance so you can SSH into it later if you experience any problems.
-
-   **Important**
-   I had to add the role AmazonEC2ContainerServiceforEC2Role to my instance otherwise the cluster I created (see below) could not find any instance.
-   See this [Stackoverflow topic](http://stackoverflow.com/questions/36523282/aws-ecs-error-when-running-task-no-container-instances-were-found-in-your-clust)
-   
-2. Create a cluster (a cluster can contain one or more EC2 instances)
-
-3. Create a task definition (this specifies which docker image you want to run).  You can use most default settings, except:
-        
-        1) Set correct container name, repository name and docker image tag
-        2) You need to add a port mapping for running and exposing the ports used by the app. Add port Host 80 and Container port 80, protocol TCP.
-        3) Add environment variables (if you have an app that needs this)
-
-4. Make sure that your repository contains the docker image/tag.
-
-5. Create a Service (set number of tasks to one) and add the previous task definition
-
-5. Make sure that inbound http 80 is set for your instance (configure in security groups)
-
-6. AWS will now try to start the task. Make sure the status is 'RUNNING' and there are no errors in events tab in service.
-   Also check there are no errors in task under container details. 
-
-7. You can find your app url in the current running task under container. (Under column external link)
-
-8. Click the link. Hopefully your app is now displayed.
-
-
 ## Heroku pipeline and Docker
 
 Heroku curently (at time of writing: 12/01/2017) does not support promoting apps that are using Docker (for example staging => production)
@@ -346,6 +312,10 @@ docker-compose -f docker-compose.production.yml up
 
 As an example you will see there is a different environment setting for a database connection string in this project.
 This can be useful if you want to test the docker image on your local docker machine using a development database or rather connect to production database (or maybe another database..)
+
+## Deploying to AWS Elastic Beanstalk
+
+See other [README](https://github.com/Euricom/case_docker_api/blob/master/README_AMAZON_AWS.md) in this GitHub
 
 
 ## Helpful resources / References

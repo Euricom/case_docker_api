@@ -1,4 +1,38 @@
-# Deploying this example application to Amazon AWS (Elastic Beanstalk)
+# How to deploy the example app to Amazon AWS (without using ElasticBeanstalk) (and without CircleCI)
+
+1. You need to set up some basics in Amazon EC2: Create a Amazon EC2 Instance. I chose amzn-ami-2016.09.d-amazon-ecs-optimized (ami-5b6dde3b) because we need a working docker environment in the image.
+   More info here [Amazon ECS-optimized AMI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
+
+   **Useful**
+   You may want to add a key pair to your instance so you can SSH into it later if you experience any problems.
+
+   **Important**
+   I had to add the role AmazonEC2ContainerServiceforEC2Role to my instance otherwise the cluster I created (see below) could not find any instance.
+   See this [Stackoverflow topic](http://stackoverflow.com/questions/36523282/aws-ecs-error-when-running-task-no-container-instances-were-found-in-your-clust)
+   
+2. Create a cluster (a cluster can contain one or more EC2 instances)
+
+3. Create a task definition (this specifies which docker image you want to run).  You can use most default settings, except:
+        
+        1) Set correct container name, repository name and docker image tag
+        2) You need to add a port mapping for running and exposing the ports used by the app. Add port Host 80 and Container port 80, protocol TCP.
+        3) Add environment variables (if you have an app that needs this)
+
+4. Make sure that your repository contains the docker image/tag.
+
+5. Create a Service (set number of tasks to one) and add the previous task definition
+
+5. Make sure that inbound http 80 is set for your instance (configure in security groups)
+
+6. AWS will now try to start the task. Make sure the status is 'RUNNING' and there are no errors in events tab in service.
+   Also check there are no errors in task under container details. 
+
+7. You can find your app url in the current running task under container. (Under column external link)
+
+8. Click the link. Hopefully your app is now displayed.
+
+
+# How to deploy the example app to Amazon AWS (using Elastic Beanstalk) (and using CircleCI)
 
 This guide will help you deploy a Docker application to AWS Elastic Beanstalk.
 We will use 
@@ -7,7 +41,7 @@ We will use
 
 **Amazon Elastic Beanstalk** as a service to help you deploy your Docker application easily 
 
-Elastic Beanstalk makes it very easy to deploy your application to Amazon. 
+**Elastic Beanstalk** makes it very easy to deploy your application to Amazon. It will do a lot of stuff for you like creating EC2 instances, setting up storage, assigning security groups, etc..
 
 ## Assumptions
 
@@ -116,9 +150,20 @@ The script contains a simple Mocha test. If the test passes, it will
 
         *Note: You can also use environment variables in CircleCI instead of passing these hardcoded in circle.yml.* 
 
+11. Add permissions/roles so Elastic Beanstalk (?)
 
-11. Add permissions/roles so ElasticBeanstalk
+12. Add environment variable to your Elastic Beanstalk app environment. Go to Configuration, then Software Configuration and Add environment variable "PORT" with value 80 
 
 ## Let CircleCI do it's job
 
 Now if you commit to develop branch or master branch, it should automatically deploy your app to Amazon.
+
+## How to deploy to production ? 
+
+If you want to deploy to production you can use the web interface of Elastic Beanstalk. Just go to Application Versions, choose your version and click 'Deploy'. Finally you choose the environment (=production)
+
+## Helpful resources / References
+
+[What is Elastic Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
+
+[Full example on how to deploy to Elastic Beanstalk](https://gist.github.com/yefim/93fb5aa3291b3843353794127804976f)
