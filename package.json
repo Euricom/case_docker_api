@@ -1,6 +1,6 @@
 {
-  "name": "myapp",
-  "version": "1.0.0",
+  "name": "case-docker-api",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "node ./server/server",
