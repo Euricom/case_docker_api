@@ -9,11 +9,13 @@ set -e
 VERSION=$(node server/extractversion.js)
 echo $VERSION
 
+AWS_ACCOUNT_ID=708547824206
 ENVIRONMENT=$1
 AWS_APP=$2
 EB_BUCKET=$3
 REGION=$4
-AWS_APP_ENVIRONMENT=$5 
+AWS_APP_ENVIRONMENT=$5
+DOCKER_REPO=$6
 
 configure_aws_cli(){
     echo $REGION
@@ -74,27 +76,45 @@ cleanup_ecr_images(){
 
 deploy_to_aws(){
 
-    ZIP=$VERSION.zip
 
     # If development
     if [ $ENVIRONMENT = "dev" ]; then
 
-        # Zip up the Dockerrun.aws.json file. The zip name is the $VERSION.zip. The contents of the zip is the Dockerrun.aws.json
-        zip -j deploy/$ZIP deploy/aws_dev/Dockerrun.aws.json
+        echo 'Dockerrun.aws.json = DEV'
+        ZIP=development.zip
+
+        # Create a zip that contains the Dockerrun.aws.json file.
+        # The zip name is the development.zip
+        # The contents of the zip is the Dockerrun.aws.json with docker image, tag :dev
+        zip -j deploy/development.zip deploy/aws_dev/Dockerrun.aws.json
+
+        # Copy or replace zip in S3.
+        aws s3 cp deploy/$ZIP s3://$EB_BUCKET/$ZIP
 
         GIT_HASH=$(git describe --always)
         VERSION_LABEL=development_$GIT_HASH
         
     # Else if staging, set label to version
     else
+   
+        echo 'Dockerrun.aws.json = STAGING'
+        ZIP=$VERSION.zip
+
+        IMAGE_NAME=$DOCKER_REPO
+        IMAGE_NAME+=:$VERSION
+
+        # Edit the Dockerrun.aws.json so that the tag is the correct version tag
+        cat deploy/aws_staging/Dockerrun.aws.json | jq --arg v "$IMAGE_NAME"  '.Image.Name=$v' > deploy/aws_staging/tmp.$$.json && mv deploy/aws_staging/tmp.$$.json deploy/aws_staging/Dockerrun.aws.json
+
+        # Create a zip that contains the Dockerrun.aws.json file.
+        zip -j deploy/$ZIP deploy/aws_staging/Dockerrun.aws.json
+
+        # Copy or replace zip in S3.
+        aws s3 cp deploy/$ZIP s3://$EB_BUCKET/$ZIP
 
         # Zip up the Dockerrun.aws.json file. The zip name is the $VERSION.zip. The contents of the zip is the Dockerrun.aws.json
-        zip -j deploy/$ZIP deploy/aws_staging/Dockerrun.aws.json
         VERSION_LABEL=$VERSION
     fi
-
-    # Copy or replace zip in S3.
-    aws s3 cp deploy/$ZIP s3://$EB_BUCKET/$ZIP
     
     # Create a new application version with the zipped up Dockerrun file
     aws elasticbeanstalk create-application-version --application-name $AWS_APP \

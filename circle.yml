@@ -22,7 +22,7 @@ deployment:
             # - sh deploy/deploy_using_awsdockerrepo_heroku.sh dev case-docker-api us-west-2
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-dev
-            - sh deploy/deploy_aws_elasticbeanstalk.sh dev case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2 caseDockerApi-dev
+            - sh deploy/deploy_aws_elasticbeanstalk.sh dev case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2 caseDockerApi-dev 708547824206.dkr.ecr.us-west-2.amazonaws.com/case-docker-api
     
     production:
         branch: master
@@ -37,4 +37,4 @@ deployment:
             # - sh deploy/deploy_using_awsdockerrepo_heroku.sh staging case-docker-api us-west-2
 
             # For deploying the app to AWS ElasticBeanstalk/EC2 - caseDockerApi-staging
-            - sh deploy/deploy_aws_elasticbeanstalk.sh staging case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2 caseDockerApi-staging
+            - sh deploy/deploy_aws_elasticbeanstalk.sh staging case-docker-api elasticbeanstalk-us-west-2-708547824206 us-west-2 caseDockerApi-staging 708547824206.dkr.ecr.us-west-2.amazonaws.com/case-docker-api
