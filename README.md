@@ -18,7 +18,7 @@ Then navigate to `http://localhost:80/`
 
 ```Docker
 docker build -t case-docker-api .
-docker run case-docker-api -p 80:80
+docker run -p 80:80 case-docker-api
 ```
 You should see something like this:
 
